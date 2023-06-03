@@ -125,8 +125,8 @@ public class JSONRPC2Session {
     }
 
     public <K, V> JSONRPC2Response<Map<K, V>> sendAndGetMapResult(final JSONRPC2Request request,
-                                                              final Class<K> resultKeyType,
-                                                              final Class<V> resultValueType
+                                                                  final Class<K> resultKeyType,
+                                                                  final Class<V> resultValueType
     ) throws JSONRPC2SessionException {
         return send(request, (body) -> {
             try {

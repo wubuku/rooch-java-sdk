@@ -3,7 +3,6 @@ package com.github.wubuku.rooch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wubuku.rooch.bean.GetMoveStructAnnotatedStatesResponse;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -107,7 +106,7 @@ public class JsonRpcTests {
     }
 
     @Test
-    void testJsonDeserialize_3() throws JsonProcessingException {
+    void testJsonDeserialize_2() throws JsonProcessingException {
         GetAnnotatedStatesResponse getAnnotatedStatesResponse = objectMapper.readValue(
                 testJson1,
                 new TypeReference<GetAnnotatedStatesResponse>() {
@@ -116,14 +115,14 @@ public class JsonRpcTests {
         System.out.println(getAnnotatedStatesResponse);
     }
 
-    @Test
-    void testJsonDeserialize_2() throws JsonProcessingException {
-        GetMoveStructAnnotatedStatesResponse<Map> getAnnotatedStatesResponse = objectMapper.readValue(
-                testJson1,
-                objectMapper.getTypeFactory().constructParametricType(GetMoveStructAnnotatedStatesResponse.class, Map.class)
-        );
-        System.out.println(getAnnotatedStatesResponse);
-    }
+//    @Test
+//    void testJsonDeserialize_2() throws JsonProcessingException {
+//        GetMoveStructAnnotatedStatesResponse<Map> getAnnotatedStatesResponse = objectMapper.readValue(
+//                testJson1,
+//                objectMapper.getTypeFactory().constructParametricType(GetMoveStructAnnotatedStatesResponse.class, Map.class)
+//        );
+//        System.out.println(getAnnotatedStatesResponse);
+//    }
 
     @Test
     void testBase64() {

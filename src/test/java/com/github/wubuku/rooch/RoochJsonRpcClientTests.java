@@ -3,9 +3,12 @@ package com.github.wubuku.rooch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
+import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponseMoveStructItem;
+import com.github.wubuku.rooch.bean.MoveOSStdObject;
 import com.github.wubuku.rooch.utils.RoochJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 
 public class RoochJsonRpcClientTests {
@@ -18,22 +21,34 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xf214acee9a2120b872da26c73abaaec7e11aff88865315b18306b0a7edd4cddb";
+        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
     }
-
 
     @Test
     void testGetAnnotatedStatesResponse_2() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xf214acee9a2120b872da26c73abaaec7e11aff88865315b18306b0a7edd4cddb";
+        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
-        System.out.println(response);
+        GetTestSomethingAnnotatedStatesResponseItem[] response = rpcClient.getMoveStructAnnotatedStates(path,
+                GetTestSomethingAnnotatedStatesResponseItem[].class
+        );
 
+        System.out.println(response);
+        System.out.println(response[0].getMoveValue().getValue());
     }
+
+//    @Test
+//    void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
+//        String rpcBaseUrl = "http://127.0.0.1:50051/";
+//        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+//        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+//        GetTestSomethingAnnotatedStatesResponseItem2[] response = rpcClient.getMoveOSStdObjectAnnotatedStates(path, GetTestSomethingAnnotatedStatesResponseItem2[].class);
+//        System.out.println(response);
+//        System.out.println(response[0].getMoveValue().getValue().getValue().getValue().i);
+//    }
 
     @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
@@ -43,6 +58,27 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
 
+    }
+
+    public static class GetTestSomethingAnnotatedStatesResponseItem extends GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject> {
+
+    }
+
+    public static class TestSomethingObject extends MoveOSStdObject<TestSomethingProperties> {
+
+    }
+
+    public static class TestSomethingProperties {
+        public Integer i;
+        public BigInteger j;
+
+        @Override
+        public String toString() {
+            return "TestSomethingProperties{" +
+                    "i=" + i +
+                    ", j=" + j +
+                    '}';
+        }
     }
 
 
