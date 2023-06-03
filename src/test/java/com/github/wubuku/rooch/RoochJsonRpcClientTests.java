@@ -20,13 +20,18 @@ public class RoochJsonRpcClientTests {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         String path = "/object/0xf214acee9a2120b872da26c73abaaec7e11aff88865315b18306b0a7edd4cddb";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStatesResponse(path);
+        GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
     }
 
 
     @Test
-    void testGetEventsByTransactionDigest_2() throws MalformedURLException, JsonProcessingException {
+    void testGetAnnotatedStatesResponse_2() throws MalformedURLException, JsonProcessingException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        String path = "/object/0xf214acee9a2120b872da26c73abaaec7e11aff88865315b18306b0a7edd4cddb";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
+        System.out.println(response);
 
     }
 

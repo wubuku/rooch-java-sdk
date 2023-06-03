@@ -1,5 +1,6 @@
 package com.github.wubuku.rooch.utils;
 
+import com.github.wubuku.rooch.bean.GetMoveStructAnnotatedStatesResponse;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
 import org.starcoin.jsonrpc.JSONRPC2Request;
 import org.starcoin.jsonrpc.JSONRPC2Response;
@@ -31,7 +32,7 @@ public class RoochJsonRpcClient {
         return jsonrpc2Session;
     }
 
-    public GetAnnotatedStatesResponse getAnnotatedStatesResponse(String path) {
+    public GetAnnotatedStatesResponse getAnnotatedStates(String path) {
         List<Object> params = new ArrayList<>();
         params.add(path);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
@@ -39,6 +40,22 @@ public class RoochJsonRpcClient {
         try {
             JSONRPC2Response<GetAnnotatedStatesResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     GetAnnotatedStatesResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> GetMoveStructAnnotatedStatesResponse<T> getMoveStructAnnotatedStates(String path, Class<T> structClass) {
+        List<Object> params = new ArrayList<>();
+        params.add(path);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<GetMoveStructAnnotatedStatesResponse<T>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetParametricTypeResult(jsonrpc2Request,
+                            GetMoveStructAnnotatedStatesResponse.class, structClass);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {

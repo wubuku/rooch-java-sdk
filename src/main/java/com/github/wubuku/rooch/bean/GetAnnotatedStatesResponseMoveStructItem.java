@@ -1,9 +1,9 @@
 package com.github.wubuku.rooch.bean;
 
-public class GetAnnotatedStatesResponseItem extends AbstractGetAnnotatedStatesResponseItem<AnnotatedMoveValueView> {
+public class GetAnnotatedStatesResponseMoveStructItem<T> extends AbstractGetAnnotatedStatesResponseItem<AnnotatedMoveStructView<T>> {
     @Override
     public String toString() {
-        return "GetAnnotatedStatesResponseItem{" +
+        return "GetAnnotatedStatesResponseMoveStructItem{" +
                 "state=" + getState() +
                 ", moveValue=" + getMoveValue() +
                 '}';
