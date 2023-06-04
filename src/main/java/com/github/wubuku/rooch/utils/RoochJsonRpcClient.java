@@ -47,14 +47,14 @@ public class RoochJsonRpcClient {
         }
     }
 
-    public <T extends GetAnnotatedStatesResponseMoveStructItem<?>> T[] getMoveStructAnnotatedStates(String path, Class<T[]> clazz) {
+    public <T extends GetAnnotatedStatesResponseMoveStructItem<?>> T[] getMoveStructAnnotatedStateArray(String path, Class<T[]> arrayClazz) {
         List<Object> params = new ArrayList<>();
         params.add(path);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<T[]> jsonrpc2Response = jsonrpc2Session
-                    .send(jsonrpc2Request, clazz);
+                    .send(jsonrpc2Request, arrayClazz);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
@@ -62,5 +62,19 @@ public class RoochJsonRpcClient {
         }
     }
 
+    public <T extends GetAnnotatedStatesResponseMoveStructItem<?>> List<T> getMoveStructAnnotatedStates(String path, Class<T> itemClazz) {
+        List<Object> params = new ArrayList<>();
+        params.add(path);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<List<T>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetListResult(jsonrpc2Request, itemClazz);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

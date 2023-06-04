@@ -2,11 +2,16 @@ package com.github.wubuku.rooch.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public abstract class AbstractGetAnnotatedStatesResponseItem<T extends AnnotatedMoveValueView> {
+/**
+ * Item of `rooch_getAnnotatedStates` result.
+ *
+ * @param <VT> AnnotatedMoveValueView Type
+ */
+public abstract class AbstractGetAnnotatedStatesResponseItem<VT extends AnnotatedMoveValueView> {
 
     private GetStatesResponseItem state;
     @JsonProperty("move_value")
-    private T moveValue;
+    private VT moveValue;
 
     public GetStatesResponseItem getState() {
         return state;
@@ -16,11 +21,11 @@ public abstract class AbstractGetAnnotatedStatesResponseItem<T extends Annotated
         this.state = state;
     }
 
-    public T getMoveValue() {
+    public VT getMoveValue() {
         return moveValue;
     }
 
-    public void setMoveValue(T moveValue) {
+    public void setMoveValue(VT moveValue) {
         this.moveValue = moveValue;
     }
 

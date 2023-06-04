@@ -1,17 +1,15 @@
 package com.github.wubuku.rooch.bean;
 
-import java.util.Map;
-
-public class AnnotatedMoveStructView<T> implements AnnotatedMoveValueView {
+public class AnnotatedMoveStructView<ValueT> implements AnnotatedMoveValueView {
 
     private Integer abilities;
     private String type;
-    private T value;
+    private ValueT value;
 
     public AnnotatedMoveStructView(){
     }
 
-    public AnnotatedMoveStructView(Integer abilities, String type, T value) {
+    public AnnotatedMoveStructView(Integer abilities, String type, ValueT value) {
         this.abilities = abilities;
         this.type = type;
         this.value = value;
@@ -33,11 +31,11 @@ public class AnnotatedMoveStructView<T> implements AnnotatedMoveValueView {
         this.type = type;
     }
 
-    public T getValue() {
+    public ValueT getValue() {
         return value;
     }
 
-    public void setValue(T value) {
+    public void setValue(ValueT value) {
         this.value = value;
     }
 
