@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponseMoveStructItem;
+import com.github.wubuku.rooch.bean.GetStatesResponse;
 import com.github.wubuku.rooch.bean.MoveOSStdObject;
 import com.github.wubuku.rooch.utils.RoochJsonRpcClient;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,14 @@ public class RoochJsonRpcClientTests {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    @Test
+    void testGetStatesResponse_1() throws MalformedURLException, JsonProcessingException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        GetStatesResponse response = rpcClient.getStates(path);
+        System.out.println(response);
+    }
 
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {

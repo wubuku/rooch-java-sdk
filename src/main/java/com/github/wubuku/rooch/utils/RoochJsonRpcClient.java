@@ -2,6 +2,7 @@ package com.github.wubuku.rooch.utils;
 
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponseMoveStructItem;
+import com.github.wubuku.rooch.bean.GetStatesResponse;
 import org.starcoin.jsonrpc.JSONRPC2Request;
 import org.starcoin.jsonrpc.JSONRPC2Response;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
@@ -30,6 +31,21 @@ public class RoochJsonRpcClient {
 
     protected JSONRPC2Session getJSONRPC2Session() {
         return jsonrpc2Session;
+    }
+
+    public GetStatesResponse getStates(String path) {
+        List<Object> params = new ArrayList<>();
+        params.add(path);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getStates", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<GetStatesResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    GetStatesResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public GetAnnotatedStatesResponse getAnnotatedStates(String path) {
