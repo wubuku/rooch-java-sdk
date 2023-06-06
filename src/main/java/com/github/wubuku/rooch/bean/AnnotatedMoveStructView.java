@@ -6,7 +6,7 @@ public class AnnotatedMoveStructView<ValueT> implements AnnotatedMoveValueView {
     private String type;
     private ValueT value;
 
-    public AnnotatedMoveStructView(){
+    public AnnotatedMoveStructView() {
     }
 
     public AnnotatedMoveStructView(Integer abilities, String type, ValueT value) {

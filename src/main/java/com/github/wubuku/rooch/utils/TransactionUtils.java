@@ -2,8 +2,6 @@ package com.github.wubuku.rooch.utils;
 
 import com.google.common.primitives.Bytes;
 
-import java.util.Base64;
-
 public class TransactionUtils {
     /**
      * This is currently hardcoded.

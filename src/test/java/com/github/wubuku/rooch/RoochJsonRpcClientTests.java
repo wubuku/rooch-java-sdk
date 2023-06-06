@@ -19,7 +19,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetStatesResponse response = rpcClient.getStates(path);
         System.out.println(response);
@@ -28,50 +28,54 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
     }
 
-    @Test
-    void testGetAnnotatedStatesResponse_2() throws MalformedURLException, JsonProcessingException {
-        String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
-        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        GetTestSomethingAnnotatedStatesResponseItem[] response = rpcClient.getMoveStructAnnotatedStateArray(path,
-                GetTestSomethingAnnotatedStatesResponseItem[].class
-        );
-
-        System.out.println(response);
-        System.out.println(response[0].getMoveValue().getValue());
-    }
-
-    @Test
-    void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
-        String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x383faac062ca1f1a228981ec02e231ed8929a867de09d57bcb4cef9fc57298a9";
-        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        List<GetTestSomethingAnnotatedStatesResponseItem> response = rpcClient.getMoveStructAnnotatedStates(path,
-                GetTestSomethingAnnotatedStatesResponseItem.class
-        );
-
-        System.out.println(response);
-        System.out.println(response.get(0).getMoveValue().getValue());
-    }
-
 //    @Test
-//    void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
+//    void testGetAnnotatedStatesResponse_2() throws MalformedURLException, JsonProcessingException {
 //        String rpcBaseUrl = "http://127.0.0.1:50051/";
-//        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+//        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
 //        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-//        GetTestSomethingAnnotatedStatesResponseItem2[] response = rpcClient.getMoveOSStdObjectAnnotatedStates(path, GetTestSomethingAnnotatedStatesResponseItem2[].class);
+//        GetTestSomethingAnnotatedStatesResponseItem[] response = rpcClient.getMoveStructAnnotatedStateArray(path,
+//                GetTestSomethingAnnotatedStatesResponseItem[].class
+//        );
+//
 //        System.out.println(response);
 //        System.out.println(response[0].getMoveValue().getValue().getValue().getValue().i);
 //    }
 
     @Test
+    void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response = rpcClient.getMoveStructAnnotatedStates(path,
+                TestSomethingObject.class
+        );
+
+        System.out.println(response);
+        System.out.println(response.get(0).getMoveValue().getValue().getValue());
+        //
+        //todo java.util.LinkedHashMap cannot be cast to RoochJsonRpcClientTests$TestSomethingProperties
+        //
+        //System.out.println(response.get(0).getMoveValue().getValue().getValue().getValue().i);
+    }
+
+    @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        String eventHandleId = "0x436305b861b7780b1a88cd38e1b5c5348a20d2b65fbe84e87de926c96f703711";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandleId);
+        System.out.println(response);
+        //System.out.println(response.get(0).getParsedEventData().getValue().getClass());
+
+        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
+        System.out.println(response2);
+        System.out.println(response2.get(0).getParsedEventData().getValue().i);
 
     }
 
@@ -80,9 +84,26 @@ public class RoochJsonRpcClientTests {
 
     }
 
-    public static class GetTestSomethingAnnotatedStatesResponseItem extends GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject> {
+    public static class TestSomethingCreated {
+        public Integer i;
+        public BigInteger j;
 
+        @Override
+        public String toString() {
+            return "TestSomethingCreated{" +
+                    "i=" + i +
+                    ", j=" + j +
+                    '}';
+        }
     }
+
+//    public static class GetTestSomethingAnnotatedStatesResponse extends ArrayList<GetTestSomethingAnnotatedStatesResponseItem> {
+//
+//    }
+
+//    public static class GetTestSomethingAnnotatedStatesResponseItem extends GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject> {
+//
+//    }
 
     public static class TestSomethingObject extends MoveOSStdObject<TestSomethingProperties> {
 
