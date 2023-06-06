@@ -2,10 +2,7 @@ package com.github.wubuku.rooch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
-import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponseMoveStructItem;
-import com.github.wubuku.rooch.bean.GetStatesResponse;
-import com.github.wubuku.rooch.bean.MoveOSStdObject;
+import com.github.wubuku.rooch.bean.*;
 import com.github.wubuku.rooch.utils.RoochJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +50,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0xfc706290bd386345feb92bb4a21cd04b4941c63c3eabfbb30202f9000a4c15e6";
+        String path = "/object/0x383faac062ca1f1a228981ec02e231ed8929a867de09d57bcb4cef9fc57298a9";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         List<GetTestSomethingAnnotatedStatesResponseItem> response = rpcClient.getMoveStructAnnotatedStates(path,
                 GetTestSomethingAnnotatedStatesResponseItem.class
@@ -95,11 +92,17 @@ public class RoochJsonRpcClientTests {
         public Integer i;
         public BigInteger j;
 
+        public AnnotatedMoveTableView fooTable;
+
+        public AnnotatedMoveTableView barTable;
+
         @Override
         public String toString() {
             return "TestSomethingProperties{" +
                     "i=" + i +
                     ", j=" + j +
+                    ", fooTable=" + fooTable +
+                    ", barTable=" + barTable +
                     '}';
         }
     }
