@@ -34,26 +34,13 @@ public class RoochJsonRpcClientTests {
         System.out.println(response);
     }
 
-//    @Test
-//    void testGetAnnotatedStatesResponse_2() throws MalformedURLException, JsonProcessingException {
-//        String rpcBaseUrl = "http://127.0.0.1:50051/";
-//        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
-//        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-//        GetTestSomethingAnnotatedStatesResponseItem[] response = rpcClient.getMoveStructAnnotatedStateArray(path,
-//                GetTestSomethingAnnotatedStatesResponseItem[].class
-//        );
-//
-//        System.out.println(response);
-//        System.out.println(response[0].getMoveValue().getValue().getValue().getValue().i);
-//    }
-
     @Test
     void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response = rpcClient.getMoveStructAnnotatedStates(path,
-                TestSomethingObject.class
+        List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response = rpcClient.getMoveStructAnnotatedStates(path,
+                MoveOSStdObject.class, TestSomethingProperties.class
         );
 
         System.out.println(response);
@@ -61,7 +48,17 @@ public class RoochJsonRpcClientTests {
         //
         //todo java.util.LinkedHashMap cannot be cast to RoochJsonRpcClientTests$TestSomethingProperties
         //
-        //System.out.println(response.get(0).getMoveValue().getValue().getValue().getValue().i);
+        MoveOSStdObject<TestSomethingProperties> moveOSStdObject = (MoveOSStdObject<TestSomethingProperties>) response.get(0).getMoveValue().getValue();
+        //System.out.println(moveOSStdObject.getValue().getValue().i);
+
+        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response2 = rpcClient.getMoveStructAnnotatedStates(path,
+                TestSomethingObject.class
+        );
+        System.out.println(response2);
+        System.out.println(response2.get(0).getMoveValue().getValue().getValue());
+        //todo java.util.LinkedHashMap cannot be cast to RoochJsonRpcClientTests$TestSomethingProperties
+        //System.out.println(response2.get(0).getMoveValue().getValue().getValue().getValue().i);
+
     }
 
     @Test
@@ -96,14 +93,6 @@ public class RoochJsonRpcClientTests {
                     '}';
         }
     }
-
-//    public static class GetTestSomethingAnnotatedStatesResponse extends ArrayList<GetTestSomethingAnnotatedStatesResponseItem> {
-//
-//    }
-
-//    public static class GetTestSomethingAnnotatedStatesResponseItem extends GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject> {
-//
-//    }
 
     public static class TestSomethingObject extends MoveOSStdObject<TestSomethingProperties> {
 
