@@ -10,7 +10,6 @@ import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.MalformedURLException;
 import java.util.Base64;
-import java.util.Map;
 
 public class JsonRpcTests {
     ObjectMapper objectMapper = new ObjectMapper();

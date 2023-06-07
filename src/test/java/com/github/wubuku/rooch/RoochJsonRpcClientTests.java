@@ -41,22 +41,23 @@ public class RoochJsonRpcClientTests {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+
+        // ////////////////////
         List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response = rpcClient.getMoveStructAnnotatedStates(path,
                 MoveOSStdObject.class, TestSomethingProperties.class
         );
-
         System.out.println(response);
         System.out.println(response.get(0).getMoveValue().getValue().getValue());
         MoveOSStdObject<TestSomethingProperties> moveOSStdObject = (MoveOSStdObject<TestSomethingProperties>) response.get(0).getMoveValue().getValue();
         System.out.println(moveOSStdObject.getValue().getValue().i);
 
+        // ////////////////////
         List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response2 = rpcClient.getMoveStructAnnotatedStates(path,
                 TestSomethingObject.class
         );
         System.out.println(response2);
         System.out.println(response2.get(0).getMoveValue().getValue().getValue());
         System.out.println(response2.get(0).getMoveValue().getValue().getValue().getValue().i);
-
     }
 
     @Test

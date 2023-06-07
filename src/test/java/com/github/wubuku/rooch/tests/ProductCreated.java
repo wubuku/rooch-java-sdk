@@ -8,7 +8,7 @@ package com.github.wubuku.rooch.tests;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.math.*;
+import java.math.BigInteger;
 
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 public class ProductCreated {

@@ -124,6 +124,21 @@ public class JSONRPC2Session {
         });
     }
 
+
+    public <E> JSONRPC2Response<List<E>> sendAndGetListResult(final JSONRPC2Request request,
+                                                              final JavaType resultElementType
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        om.getTypeFactory().constructCollectionType(List.class, resultElementType)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public <K, V> JSONRPC2Response<Map<K, V>> sendAndGetMapResult(final JSONRPC2Request request,
                                                                   final Class<K> resultKeyType,
                                                                   final Class<V> resultValueType

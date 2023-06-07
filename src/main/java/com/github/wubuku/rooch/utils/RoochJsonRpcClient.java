@@ -62,36 +62,23 @@ public class RoochJsonRpcClient {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public <T> List<GetAnnotatedStatesResponseMoveStructItem<T>> getMoveStructAnnotatedStates(String path, Class<T> valueClass, Class<?>... parameterClasses) {
         List<Object> params = new ArrayList<>();
         params.add(path);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
                 System.currentTimeMillis());
         try {
-            JSONRPC2Response<List<GetAnnotatedStatesResponseMoveStructItem>> jsonrpc2Response = jsonrpc2Session
-                    .sendAndGetListResult(jsonrpc2Request, GetAnnotatedStatesResponseMoveStructItem.class);
-            assertSuccess(jsonrpc2Response);
             JavaType valueType = parameterClasses != null && parameterClasses.length > 0
                     ? jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(valueClass, parameterClasses)
-                    : null;
-            List<GetAnnotatedStatesResponseMoveStructItem> rawItems = jsonrpc2Response.getResult();
-            List<GetAnnotatedStatesResponseMoveStructItem<T>> items = new ArrayList<>();
-            if (rawItems != null) {
-                for (GetAnnotatedStatesResponseMoveStructItem<?> rawItem : rawItems) {
-                    AnnotatedMoveStructView<?> rawView = rawItem.getMoveValue();
-                    T val = valueType != null
-                            ? jsonrpc2Session.getObjectMapper().convertValue(rawView.getValue(), valueType)
-                            : jsonrpc2Session.getObjectMapper().convertValue(rawView.getValue(), valueClass);
-                    AnnotatedMoveStructView<T> view = new AnnotatedMoveStructView<>();
-                    view.setValue(val);
-                    GetAnnotatedStatesResponseMoveStructItem<T> item = new GetAnnotatedStatesResponseMoveStructItem<>();
-                    item.setMoveValue(view);
-                    item.setState(rawItem.getState());
-                    items.add(item);
-                }
-            }
-            return items;
+                    : jsonrpc2Session.getObjectMapper().getTypeFactory().constructType(valueClass);
+            JSONRPC2Response<List<GetAnnotatedStatesResponseMoveStructItem<T>>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetListResult(jsonrpc2Request,
+                            jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(
+                                    GetAnnotatedStatesResponseMoveStructItem.class, valueType
+                            )
+                    );
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
             throw new RuntimeException(e);
         }
@@ -113,38 +100,19 @@ public class RoochJsonRpcClient {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public <T> List<MoveOSEvent<T>> getEventsByEventHandle(String eventHandleId, Class<T> eventType) {
         List<Object> params = new ArrayList<>();
         params.add(eventHandleId);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
                 System.currentTimeMillis());
         try {
-            JSONRPC2Response<List<MoveOSEvent>> jsonrpc2Response = jsonrpc2Session
-                    .sendAndGetListResult(jsonrpc2Request, MoveOSEvent.class);
+            JSONRPC2Response<List<MoveOSEvent<T>>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(jsonrpc2Request,
+                    jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(
+                            MoveOSEvent.class, eventType
+                    )
+            );
             assertSuccess(jsonrpc2Response);
-            List<MoveOSEvent> rawItems = jsonrpc2Response.getResult();
-            List<MoveOSEvent<T>> items = new ArrayList<>();
-            if (rawItems != null) {
-                for (MoveOSEvent<?> rawItem : rawItems) {
-                    AnnotatedMoveStructView<?> rawView = rawItem.getParsedEventData();
-                    T val = jsonrpc2Session.getObjectMapper().convertValue(rawView.getValue(), eventType);
-                    AnnotatedMoveStructView<T> view = new AnnotatedMoveStructView<>();
-                    view.setValue(val);
-                    MoveOSEvent<T> item = new MoveOSEvent<>();
-                    item.setParsedEventData(view);
-                    item.setEventId(rawItem.getEventId());
-                    item.setBlockHeight(rawItem.getBlockHeight());
-                    item.setEventData(rawItem.getEventData());
-                    item.setEventIndex(rawItem.getEventIndex());
-                    item.setSender(rawItem.getSender());
-                    item.setTimestampMs(rawItem.getTimestampMs());
-                    item.setTxHash(rawItem.getTxHash());
-                    item.setTypeTag(rawItem.getTypeTag());
-                    items.add(item);
-                }
-            }
-            return items;
+            return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
             throw new RuntimeException(e);
         }
