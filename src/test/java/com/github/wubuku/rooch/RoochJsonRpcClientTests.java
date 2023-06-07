@@ -63,7 +63,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String eventHandleId = "0x436305b861b7780b1a88cd38e1b5c5348a20d2b65fbe84e87de926c96f703711";
+        String eventHandleId = "0xef73ee3a1b60c4487af65ec6d38c76a72e0d91a71e3e2e93d564c9071aaa28df";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandleId);
         System.out.println(response);
@@ -75,23 +75,7 @@ public class RoochJsonRpcClientTests {
     }
 
     @Test
-    void testExecuteViewFunction() throws MalformedURLException {
-        String rpcBaseUrl = "http://127.0.0.1:50051/";
-        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        String eventType = "0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated";
-//        FunctionCallView call = new FunctionCallView();
-//        call.setFunctionId("0x1::events::get_event_handle");
-//        call.setTypeArgs(new String[]{eventType});
-//        call.setArgs(new String[0]);
-//        Object result = rpcClient.executeViewFunction(call);
-//        System.out.println(result.getClass());
-
-        Triple result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
-        System.out.println(result);
-    }
-
-    @Test
-    void testGetEvents_2() throws MalformedURLException, JsonProcessingException {
+    void testGetEventsAndGetAnnotatedStates_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
 
@@ -101,6 +85,7 @@ public class RoochJsonRpcClientTests {
 
         // ////////////////////
         String eventHandleId = result.getItem1();
+        System.out.println(eventHandleId);
         List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
         System.out.println(response2);
         System.out.println(response2.get(0).getParsedEventData().getValue().i);
@@ -112,6 +97,15 @@ public class RoochJsonRpcClientTests {
                 TestSomethingObject.class
         );
         System.out.println(response3);
+    }
+
+    @Test
+    void testExecuteViewFunction_1() throws MalformedURLException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        String eventType = "0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated";
+        Triple result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
+        System.out.println(result);
     }
 
     @Test
