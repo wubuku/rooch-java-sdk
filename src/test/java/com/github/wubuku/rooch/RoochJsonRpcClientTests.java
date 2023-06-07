@@ -32,6 +32,7 @@ public class RoochJsonRpcClientTests {
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
+        System.out.println(response.get(0).getMoveValue().getClass());
     }
 
     @Test
@@ -45,19 +46,15 @@ public class RoochJsonRpcClientTests {
 
         System.out.println(response);
         System.out.println(response.get(0).getMoveValue().getValue().getValue());
-        //
-        //todo java.util.LinkedHashMap cannot be cast to RoochJsonRpcClientTests$TestSomethingProperties
-        //
         MoveOSStdObject<TestSomethingProperties> moveOSStdObject = (MoveOSStdObject<TestSomethingProperties>) response.get(0).getMoveValue().getValue();
-        //System.out.println(moveOSStdObject.getValue().getValue().i);
+        System.out.println(moveOSStdObject.getValue().getValue().i);
 
         List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response2 = rpcClient.getMoveStructAnnotatedStates(path,
                 TestSomethingObject.class
         );
         System.out.println(response2);
         System.out.println(response2.get(0).getMoveValue().getValue().getValue());
-        //todo java.util.LinkedHashMap cannot be cast to RoochJsonRpcClientTests$TestSomethingProperties
-        //System.out.println(response2.get(0).getMoveValue().getValue().getValue().getValue().i);
+        System.out.println(response2.get(0).getMoveValue().getValue().getValue().getValue().i);
 
     }
 
@@ -68,7 +65,7 @@ public class RoochJsonRpcClientTests {
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandleId);
         System.out.println(response);
-        //System.out.println(response.get(0).getParsedEventData().getValue().getClass());
+        System.out.println(response.get(0).getParsedEventData().getValue().getClass());
 
         List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
         System.out.println(response2);

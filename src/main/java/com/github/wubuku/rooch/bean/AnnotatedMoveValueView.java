@@ -1,7 +1,8 @@
 package com.github.wubuku.rooch.bean;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-@JsonDeserialize(using = AnnotatedMoveValueViewDeserializer.class)
+//
+// Don't use AnnotatedMoveValueViewDeserializer here!
+// @JsonDeserialize(using = AnnotatedMoveValueViewDeserializer.class)
+//
 public interface AnnotatedMoveValueView {
 }
