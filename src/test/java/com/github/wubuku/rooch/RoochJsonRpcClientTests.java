@@ -74,6 +74,19 @@ public class RoochJsonRpcClientTests {
     }
 
     @Test
+    void testExecuteViewFunction() throws MalformedURLException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        FunctionCallView call = new FunctionCallView();
+        call.setFunctionId("0x1::events::get_event_handle");
+        call.setTypeArgs(new String[]{"0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated"});
+        call.setArgs(new String[0]);
+        Object result = rpcClient.executeViewFunction(call);
+        System.out.println(result.getClass());
+        System.out.println(result);
+    }
+
+    @Test
     void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
 
     }

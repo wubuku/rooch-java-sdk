@@ -150,4 +150,20 @@ public class RoochJsonRpcClient {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T executeViewFunction(FunctionCallView functionCall) {
+        List<Object> params = new ArrayList<>();
+        params.add(functionCall);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_executeViewFunction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<Object> jsonrpc2Response = jsonrpc2Session
+                    .send(jsonrpc2Request);
+            assertSuccess(jsonrpc2Response);
+            return (T) jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
