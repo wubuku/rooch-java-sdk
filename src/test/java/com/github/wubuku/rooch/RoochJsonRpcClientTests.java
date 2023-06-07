@@ -72,7 +72,6 @@ public class RoochJsonRpcClientTests {
         List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
         System.out.println(response2);
         System.out.println(response2.get(0).getParsedEventData().getValue().i);
-
     }
 
     @Test
@@ -92,18 +91,44 @@ public class RoochJsonRpcClientTests {
     }
 
     @Test
+    void testGetEvents_2() throws MalformedURLException, JsonProcessingException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+
+        String eventType = "0xf8e38d63a5208d499725e7ac4851c4a0836e45e2230041b7e3cf43e4738c47b4::something::SomethingCreated";
+        Triple<String, String, BigInteger> result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
+        System.out.println(result);
+
+        // ////////////////////
+        String eventHandleId = result.getItem1();
+        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
+        System.out.println(response2);
+        System.out.println(response2.get(0).getParsedEventData().getValue().i);
+
+        // ////////////////////
+        String objId = response2.get(0).getParsedEventData().getValue().obj_id;
+        String path = "/object/"+ objId;
+        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response3 = rpcClient.getMoveStructAnnotatedStates(path,
+                TestSomethingObject.class
+        );
+        System.out.println(response3);
+    }
+
+    @Test
     void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
 
     }
 
     public static class TestSomethingCreated {
+        public String obj_id;
         public Integer i;
         public BigInteger j;
 
         @Override
         public String toString() {
             return "TestSomethingCreated{" +
-                    "i=" + i +
+                    "obj_id='" + obj_id + '\'' +
+                    ", i=" + i +
                     ", j=" + j +
                     '}';
         }

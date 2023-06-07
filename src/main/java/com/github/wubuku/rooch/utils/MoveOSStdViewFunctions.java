@@ -17,6 +17,9 @@ public class MoveOSStdViewFunctions {
         call.setArgs(new String[0]);
         List<?> result = rpcClient.executeViewFunction(call);
         String objectId = ((List<?>) result.get(0)).get(0).toString();
+        if (!objectId.startsWith("0x")) {
+            objectId = "0x" + objectId;
+        }
         String address = result.get(1).toString();
         BigInteger eventSeq = new BigInteger(result.get(2).toString());
         return new Triple<>(objectId, address, eventSeq);
