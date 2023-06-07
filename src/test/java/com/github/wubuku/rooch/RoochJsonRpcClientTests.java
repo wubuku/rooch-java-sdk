@@ -3,6 +3,7 @@ package com.github.wubuku.rooch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.rooch.bean.*;
+import com.github.wubuku.rooch.utils.MoveOSStdViewFunctions;
 import com.github.wubuku.rooch.utils.RoochJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
@@ -77,12 +78,15 @@ public class RoochJsonRpcClientTests {
     void testExecuteViewFunction() throws MalformedURLException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        FunctionCallView call = new FunctionCallView();
-        call.setFunctionId("0x1::events::get_event_handle");
-        call.setTypeArgs(new String[]{"0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated"});
-        call.setArgs(new String[0]);
-        Object result = rpcClient.executeViewFunction(call);
-        System.out.println(result.getClass());
+        String eventType = "0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated";
+//        FunctionCallView call = new FunctionCallView();
+//        call.setFunctionId("0x1::events::get_event_handle");
+//        call.setTypeArgs(new String[]{eventType});
+//        call.setArgs(new String[0]);
+//        Object result = rpcClient.executeViewFunction(call);
+//        System.out.println(result.getClass());
+
+        Triple result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
         System.out.println(result);
     }
 
