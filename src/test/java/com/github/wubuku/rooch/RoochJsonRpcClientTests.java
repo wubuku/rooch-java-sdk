@@ -97,6 +97,17 @@ public class RoochJsonRpcClientTests {
                 TestSomethingObject.class
         );
         System.out.println(response3);
+
+        MoveOSStdTable moveTable = response3.get(0).getMoveValue().getValue().getValue().getValue().barTable.getValue();
+        String tableHandle = moveTable.getHandle();
+        String path4 = "/object/"+ tableHandle;
+        List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response4 = rpcClient.getMoveStructAnnotatedStates(path4,
+                MoveOSStdObject.class, MoveOSStdRawTableInfo.class
+        );
+        System.out.println(response4);
+        MoveOSStdObject<MoveOSStdRawTableInfo> tableMoveObj = response4.get(0).getMoveValue().getValue();
+        System.out.println(tableMoveObj.getValue().getValue().getStateRoot());
+
     }
 
     @Test
