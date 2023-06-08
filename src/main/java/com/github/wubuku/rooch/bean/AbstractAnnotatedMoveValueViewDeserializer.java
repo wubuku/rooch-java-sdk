@@ -13,9 +13,14 @@ public abstract class AbstractAnnotatedMoveValueViewDeserializer<S> extends Json
     public AnnotatedMoveValueView deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException {
         JsonToken currentToken = jsonParser.getCurrentToken();
         if (JsonToken.VALUE_STRING.equals(currentToken)) {
-            throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", currentToken, AnnotatedMoveValueView.class);
+            return new AnnotatedStringView(jsonParser.getValueAsString());
+            //throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", currentToken, AnnotatedMoveValueView.class);
         } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
             return null;
+        } else if (currentToken.isBoolean()) {
+            return new AnnotatedBooleanView(jsonParser.getValueAsBoolean());
+        } else if (currentToken.isNumeric()) {
+            return new AnnotatedNumberView(jsonParser.getNumberValue());
         } else if (currentToken.isScalarValue()) {
             throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", currentToken, AnnotatedMoveValueView.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
@@ -44,10 +49,11 @@ public abstract class AbstractAnnotatedMoveValueViewDeserializer<S> extends Json
             return new AnnotatedMoveStructView(abilities, type, value);
             //throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", jsonParser.currentToken(), AnnotatedMoveValueView.class);
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {
+            //todo Not implemented yet
             throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", jsonParser.currentToken(), AnnotatedMoveValueView.class);
         }
         return null;
     }
 
-    public abstract Class<S> getMoveStructClass();
+    protected abstract Class<S> getMoveStructClass();
 }

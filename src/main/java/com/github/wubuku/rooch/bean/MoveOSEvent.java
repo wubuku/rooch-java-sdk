@@ -14,7 +14,7 @@ public class MoveOSEvent<T> {
     private String typeTag;
     @JsonProperty("event_data")
     private String eventData;
-    @JsonProperty("parsed_json") //todo rename this?
+    @JsonProperty("parsed_event_data")
     private AnnotatedMoveStructView<T> parsedEventData;
     @JsonProperty("timestamp_ms")
     private Long timestampMs;

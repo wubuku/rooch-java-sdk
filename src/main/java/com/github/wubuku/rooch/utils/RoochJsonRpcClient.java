@@ -62,7 +62,36 @@ public class RoochJsonRpcClient {
         }
     }
 
-    public <T> List<GetAnnotatedStatesResponseMoveStructItem<T>> getMoveStructAnnotatedStates(String path, Class<T> valueClass, Class<?>... parameterClasses) {
+    public <T> List<TypedGetAnnotatedStatesResponseItem<T>> getAnnotatedStates(String path, Class<T> valueClass) {
+        List<Object> params = new ArrayList<>();
+        params.add(path);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<List<TypedGetAnnotatedStatesResponseItem<T>>> jsonrpc2Response =
+                    jsonrpc2Session.sendAndGetListResult(jsonrpc2Request,
+                            jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(
+                                    TypedGetAnnotatedStatesResponseItem.class, valueClass
+                            ));
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> TypedGetAnnotatedStatesResponseItem<T> getAnnotatedTableItem(String tableHandle, byte[] key, Class<T> valueClass) {
+        String path = "/table/" + tableHandle + "/" + HexUtils.byteArrayToHexWithPrefix(key);
+        List<TypedGetAnnotatedStatesResponseItem<T>> list = getAnnotatedStates(path, valueClass);
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public <T> List<GetAnnotatedStatesResponseMoveStructItem<T>> getMoveStructAnnotatedStates(
+            String path, Class<T> valueClass, Class<?>... parameterClasses) {
+
         List<Object> params = new ArrayList<>();
         params.add(path);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getAnnotatedStates", params,
@@ -85,9 +114,9 @@ public class RoochJsonRpcClient {
     }
 
     @SuppressWarnings("rawtypes")
-    public List<MoveOSEvent> getEventsByEventHandle(String eventHandleId) {
+    public List<MoveOSEvent> getEventsByEventHandle(String eventHandle) {
         List<Object> params = new ArrayList<>();
-        params.add(eventHandleId);
+        params.add(eventHandle);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
                 System.currentTimeMillis());
         try {
@@ -100,9 +129,9 @@ public class RoochJsonRpcClient {
         }
     }
 
-    public <T> List<MoveOSEvent<T>> getEventsByEventHandle(String eventHandleId, Class<T> eventType) {
+    public <T> List<MoveOSEvent<T>> getEventsByEventHandle(String eventHandle, Class<T> eventType) {
         List<Object> params = new ArrayList<>();
-        params.add(eventHandleId);
+        params.add(eventHandle);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
                 System.currentTimeMillis());
         try {

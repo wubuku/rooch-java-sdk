@@ -16,7 +16,7 @@ public class MoveOSStdViewFunctions {
         call.setTypeArgs(new String[]{eventType});
         call.setArgs(new String[0]);
         List<?> result = rpcClient.executeViewFunction(call);
-        String objectId = ((List<?>) result.get(0)).get(0).toString();
+        String objectId = ((List<?>) result.get(0)).get(0).toString();//todo
         if (!objectId.startsWith("0x")) {
             objectId = "0x" + objectId;
         }

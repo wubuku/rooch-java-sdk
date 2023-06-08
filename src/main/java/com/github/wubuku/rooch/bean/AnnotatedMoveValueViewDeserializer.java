@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class AnnotatedMoveValueViewDeserializer extends AbstractAnnotatedMoveValueViewDeserializer<Map> {
     @Override
-    public Class<Map> getMoveStructClass() {
+    protected Class<Map> getMoveStructClass() {
         return Map.class;
     }
 }

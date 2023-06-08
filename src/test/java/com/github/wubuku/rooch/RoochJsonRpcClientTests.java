@@ -3,6 +3,7 @@ package com.github.wubuku.rooch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.rooch.bean.*;
+import com.github.wubuku.rooch.utils.HexUtils;
 import com.github.wubuku.rooch.utils.MoveOSStdViewFunctions;
 import com.github.wubuku.rooch.utils.RoochJsonRpcClient;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
+        String path = "/object/0x4349384f4591976d3b5c043d81f7b468bab7ef851f51703923e26cda31133520";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetStatesResponse response = rpcClient.getStates(path);
         System.out.println(response);
@@ -29,7 +30,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
+        String path = "/object/0x4349384f4591976d3b5c043d81f7b468bab7ef851f51703923e26cda31133520";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
@@ -39,7 +40,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x1e6c3ad9f200f8b284a53a8aab1caa1922dac9ef0369a9020f99622d5e04d03e";
+        String path = "/object/0x4349384f4591976d3b5c043d81f7b468bab7ef851f51703923e26cda31133520";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
 
         // ////////////////////
@@ -61,15 +62,33 @@ public class RoochJsonRpcClientTests {
     }
 
     @Test
+    void testGetTableItem_1() throws MalformedURLException {
+        String rpcBaseUrl = "http://127.0.0.1:50051/";
+        String tableHandle = "0x319a0c91ab22baaf523968388bea9141d0e8f969dba3dc2b7583b8d3883b9b26";
+        byte[] key = new byte[]{1};
+        String path = "/table/" + tableHandle + "/" + HexUtils.byteArrayToHexWithPrefix(key);
+        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
+        List<TypedGetAnnotatedStatesResponseItem<BigInteger>> response = rpcClient
+                .getAnnotatedStates(path, BigInteger.class);
+        System.out.println(response);
+        System.out.println(response.get(0).getMoveValue());
+
+        TypedGetAnnotatedStatesResponseItem<BigInteger> response2 = rpcClient
+                .getAnnotatedTableItem(tableHandle, key, BigInteger.class);
+        System.out.println(response2);
+        System.out.println(response2.getMoveValue());
+    }
+
+    @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String eventHandleId = "0xef73ee3a1b60c4487af65ec6d38c76a72e0d91a71e3e2e93d564c9071aaa28df";
+        String eventHandle = "0xef73ee3a1b60c4487af65ec6d38c76a72e0d91a71e3e2e93d564c9071aaa28df";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandleId);
+        List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandle);
         System.out.println(response);
         System.out.println(response.get(0).getParsedEventData().getValue().getClass());
 
-        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandleId, TestSomethingCreated.class);
+        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandle, TestSomethingCreated.class);
         System.out.println(response2);
         System.out.println(response2.get(0).getParsedEventData().getValue().i);
     }
@@ -92,7 +111,7 @@ public class RoochJsonRpcClientTests {
 
         // ////////////////////
         String objId = response2.get(0).getParsedEventData().getValue().obj_id;
-        String path = "/object/"+ objId;
+        String path = "/object/" + objId;
         List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response3 = rpcClient.getMoveStructAnnotatedStates(path,
                 TestSomethingObject.class
         );
@@ -100,7 +119,7 @@ public class RoochJsonRpcClientTests {
 
         MoveOSStdTable moveTable = response3.get(0).getMoveValue().getValue().getValue().getValue().barTable.getValue();
         String tableHandle = moveTable.getHandle();
-        String path4 = "/object/"+ tableHandle;
+        String path4 = "/object/" + tableHandle;
         List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response4 = rpcClient.getMoveStructAnnotatedStates(path4,
                 MoveOSStdObject.class, MoveOSStdRawTableInfo.class
         );
@@ -114,7 +133,7 @@ public class RoochJsonRpcClientTests {
     void testExecuteViewFunction_1() throws MalformedURLException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        String eventType = "0x9a7ee8b910f40f7613d9b4dafb573395783a913f4e7598aaac25510bd7444de2::something::SomethingCreated";
+        String eventType = "0xf8e38d63a5208d499725e7ac4851c4a0836e45e2230041b7e3cf43e4738c47b4::something::SomethingCreated";
         Triple result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
         System.out.println(result);
     }

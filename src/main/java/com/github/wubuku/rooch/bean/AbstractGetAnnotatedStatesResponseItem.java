@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @param <VT> AnnotatedMoveValueView Type
  */
-public abstract class AbstractGetAnnotatedStatesResponseItem<VT extends AnnotatedMoveValueView> {
+public abstract class AbstractGetAnnotatedStatesResponseItem<VT> {
 
     private GetStatesResponseItem state;
     @JsonProperty("move_value")
