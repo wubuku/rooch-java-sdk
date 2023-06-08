@@ -12,6 +12,7 @@ public abstract class AbstractAnnotatedMoveValueViewDeserializer<S> extends Json
     @Override
     public AnnotatedMoveValueView deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException {
         JsonToken currentToken = jsonParser.getCurrentToken();
+        ctx.getContextualType();
         if (JsonToken.VALUE_STRING.equals(currentToken)) {
             return new AnnotatedStringView(jsonParser.getValueAsString());
             //throw new InvalidFormatException(jsonParser, "AnnotatedMoveValueViewDeserializer.deserialize() error.", currentToken, AnnotatedMoveValueView.class);
