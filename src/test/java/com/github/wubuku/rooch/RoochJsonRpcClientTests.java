@@ -29,42 +29,37 @@ public class RoochJsonRpcClientTests {
 
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {
+        String objectId = "0xad1122eb6c6cd05ce491ca3f27f7ca4e3574d607c88cfab593de0ac0ea35070e";
+        
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x4349384f4591976d3b5c043d81f7b468bab7ef851f51703923e26cda31133520";
+        String path = "/object/" + objectId;
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
         GetAnnotatedStatesResponse response = rpcClient.getAnnotatedStates(path);
         System.out.println(response);
         System.out.println(response.get(0).getMoveValue().getClass());
-    }
-
-    @Test
-    void testGetAnnotatedStatesResponse_3() throws MalformedURLException, JsonProcessingException {
-        String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String path = "/object/0x4349384f4591976d3b5c043d81f7b468bab7ef851f51703923e26cda31133520";
-        RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
 
         // ////////////////////
-        List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response = rpcClient.getMoveStructAnnotatedStates(path,
+        List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response2 = rpcClient.getMoveStructAnnotatedStates(path,
                 MoveOSStdObject.class, TestSomethingProperties.class
-        );
-        System.out.println(response);
-        System.out.println(response.get(0).getMoveValue().getValue().getValue());
-        MoveOSStdObject<TestSomethingProperties> moveOSStdObject = (MoveOSStdObject<TestSomethingProperties>) response.get(0).getMoveValue().getValue();
-        System.out.println(moveOSStdObject.getValue().getValue().i);
-
-        // ////////////////////
-        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response2 = rpcClient.getMoveStructAnnotatedStates(path,
-                TestSomethingObject.class
         );
         System.out.println(response2);
         System.out.println(response2.get(0).getMoveValue().getValue().getValue());
-        System.out.println(response2.get(0).getMoveValue().getValue().getValue().getValue().i);
+        MoveOSStdObject<TestSomethingProperties> moveOSStdObject = (MoveOSStdObject<TestSomethingProperties>) response2.get(0).getMoveValue().getValue();
+        System.out.println(moveOSStdObject.getValue().getValue().i);
+
+        // ////////////////////
+        List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response3 = rpcClient.getMoveStructAnnotatedStates(path,
+                TestSomethingObject.class
+        );
+        System.out.println(response3);
+        System.out.println(response3.get(0).getMoveValue().getValue().getValue());
+        System.out.println(response3.get(0).getMoveValue().getValue().getValue().getValue().i);
     }
 
     @Test
     void testGetTableItem_1() throws MalformedURLException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String tableHandle = "0x319a0c91ab22baaf523968388bea9141d0e8f969dba3dc2b7583b8d3883b9b26";
+        String tableHandle = "0x59e2c8f9d1d07e91fcd979fed7dbb98c3e0672b70633d9b5766054d89c738e61";
         byte[] key = new byte[]{1};
         String path = "/table/" + tableHandle + "/" + HexUtils.byteArrayToHexWithPrefix(key);
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
@@ -82,15 +77,17 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
-        String eventHandle = "0x53f32af12dc9236eb67f1c064cf55ee8891a90040f71ba17422cfdd91eb7358b";
+        //Id: "0x53f32af12dc9236eb67f1c064cf55ee8891a90040f71ba17422cfdd91eb7358b";
+        String eventHandleType = "0x565d5717526aecec1f9d464867f7d92d6eae2dc8ca73a0dc2613dd185d3d7bc7::something::SomethingCreated";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        List<MoveOSEvent> response = rpcClient.getEventsByEventHandle(eventHandle);
-        System.out.println(response);
-        System.out.println(response.get(0).getParsedEventData().getValue().getClass());
+        List<AnnotatedEventView<Object>> getEventsResponse1 = rpcClient.getEventsByEventHandle(eventHandleType, null, null, Object.class);
+        System.out.println(getEventsResponse1);
+        System.out.println(getEventsResponse1.get(0).getParsedEventData().getValue().getClass());
 
-        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandle, TestSomethingCreated.class);
-        System.out.println(response2);
-        System.out.println(response2.get(0).getParsedEventData().getValue().i);
+        List<AnnotatedEventView<TestSomethingCreated>> getEventsResponse2 = rpcClient.getEventsByEventHandle(eventHandleType,
+                null, null, TestSomethingCreated.class);
+        System.out.println(getEventsResponse2);
+        System.out.println(getEventsResponse2.get(0).getParsedEventData().getValue().i);
     }
 
     @Test
@@ -98,11 +95,12 @@ public class RoochJsonRpcClientTests {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
 
-        String eventHandle2 = "0x86a59b599dad6bd0b054eee46578c962f83479c38405555cf7ee421f82b4c7b2";
-        List<MoveOSEvent<TestBarTableItemAdded>> getEventResponse2 = rpcClient.getEventsByEventHandle(eventHandle2, TestBarTableItemAdded.class);
-        System.out.println(getEventResponse2);
-        System.out.println(getEventResponse2.get(0).getParsedEventData().getValue().item.getValue().key.getClass());
-        System.out.println(getEventResponse2.get(0).getParsedEventData().getValue().item.getValue().value.getClass());
+        String eventHandleType2 = "0x565d5717526aecec1f9d464867f7d92d6eae2dc8ca73a0dc2613dd185d3d7bc7::something::BarTableItemAdded";//Id: "0x86a59b599dad6bd0b054eee46578c962f83479c38405555cf7ee421f82b4c7b2";
+        List<AnnotatedEventView<TestBarTableItemAdded>> getEventsResponse3 = rpcClient.getEventsByEventHandle(eventHandleType2,
+                null, null, TestBarTableItemAdded.class);
+        System.out.println(getEventsResponse3);
+        System.out.println(getEventsResponse3.get(0).getParsedEventData().getValue().item.getValue().key.getClass());
+        System.out.println(getEventsResponse3.get(0).getParsedEventData().getValue().item.getValue().value.getClass());
     }
 
     @Test
@@ -120,12 +118,16 @@ public class RoochJsonRpcClientTests {
         System.out.println("eventHandle:");
         System.out.println(eventHandle);//0xd503491955e774d10d2dc373f7507022190bd2202d2a8ddbe33d838f42b61521
         System.out.println("-----------------");
-        List<MoveOSEvent<TestSomethingCreated>> response2 = rpcClient.getEventsByEventHandle(eventHandle, TestSomethingCreated.class);
-        System.out.println(response2);
-        System.out.println(response2.get(0).getParsedEventData().getValue().i);
+        List<AnnotatedEventView<TestSomethingCreated>> getEventsResponse1 = rpcClient.getEventsByEventHandle(
+                eventType, //eventHandle,
+                null, null, TestSomethingCreated.class);
+        System.out.println(getEventsResponse1);
+        System.out.println(getEventsResponse1.get(0).getParsedEventData().getValue().i);
 
         // /////////// get created object ID in event emitted /////////
-        String objId = response2.get(0).getParsedEventData().getValue().obj_id;
+        String objId = getEventsResponse1.get(0).getParsedEventData().getValue().obj_id;
+        System.out.println("Created ObjectID: " + objId);
+        System.out.println("-----------------");
         String path = "/object/" + objId;
         List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response3 = rpcClient.getMoveStructAnnotatedStates(path,
                 TestSomethingObject.class
@@ -135,6 +137,7 @@ public class RoochJsonRpcClientTests {
         // /////////// get table info. by table handle in object fields ///////////
         MoveOSStdTable moveTable = response3.get(0).getMoveValue().getValue().getValue().getValue().barTable.getValue();
         String tableHandle = moveTable.getHandle();
+        System.out.println("tableHandle: " + tableHandle);
         String path4 = "/object/" + tableHandle;
         List<GetAnnotatedStatesResponseMoveStructItem<MoveOSStdObject>> response4 = rpcClient.getMoveStructAnnotatedStates(path4,
                 MoveOSStdObject.class, MoveOSStdRawTableInfo.class
@@ -144,7 +147,7 @@ public class RoochJsonRpcClientTests {
         System.out.println(tableMoveObj.getValue().getValue().getStateRoot());
 
         // //////////// get table item value by table handle and item key //////////
-        byte[] key = new byte[] {0};
+        byte[] key = new byte[]{0};
         TypedGetAnnotatedStatesResponseItem<BigInteger> tableItemVal1 = rpcClient.getAnnotatedTableItem(tableHandle, key, BigInteger.class);
         System.out.println(tableItemVal1);
 
@@ -152,13 +155,14 @@ public class RoochJsonRpcClientTests {
         String eventType2 = contractAddr + "::something::BarTableItemAdded";
         StringStringBigIntAnnotatedFunReturnValueViewTriple evtHandleResult2 = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType2);
         System.out.println(evtHandleResult2);
-        String eventHandle2 = evtHandleResult2.getItem1().getMoveValue();
+        String eventHandleId2 = evtHandleResult2.getItem1().getMoveValue();
         //String eventHandle2 = "0x86a59b599dad6bd0b054eee46578c962f83479c38405555cf7ee421f82b4c7b2";
-        System.out.println(eventHandle2);
-        List<MoveOSEvent<TestBarTableItemAdded>> getEventResponse2 = rpcClient.getEventsByEventHandle(eventHandle2, TestBarTableItemAdded.class);
-        System.out.println(getEventResponse2);
-        System.out.println(getEventResponse2.get(0).getParsedEventData().getValue().item.getValue().key.getClass());
-        System.out.println(getEventResponse2.get(0).getParsedEventData().getValue().item.getValue().value.getClass());
+        System.out.println(eventHandleId2);
+        List<AnnotatedEventView<TestBarTableItemAdded>> getEventsResponse2 = rpcClient.getEventsByEventHandle(
+                eventType2, null, null, TestBarTableItemAdded.class);
+        System.out.println(getEventsResponse2);
+        System.out.println(getEventsResponse2.get(0).getParsedEventData().getValue().item.getValue().key.getClass());
+        System.out.println(getEventsResponse2.get(0).getParsedEventData().getValue().item.getValue().value.getClass());
 
     }
 
@@ -166,7 +170,7 @@ public class RoochJsonRpcClientTests {
     void testExecuteViewFunction_1() throws MalformedURLException {
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        String eventType = "0xf8e38d63a5208d499725e7ac4851c4a0836e45e2230041b7e3cf43e4738c47b4::something::SomethingCreated";
+        String eventType = "0x565d5717526aecec1f9d464867f7d92d6eae2dc8ca73a0dc2613dd185d3d7bc7::something::SomethingCreated";
         Triple<?, ?, ?> result = MoveOSStdViewFunctions.getEventHandle(rpcClient, eventType);
         System.out.println(result);
     }

@@ -7,6 +7,7 @@ import org.starcoin.jsonrpc.JSONRPC2Response;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -113,31 +114,23 @@ public class RoochJsonRpcClient {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public List<MoveOSEvent> getEventsByEventHandle(String eventHandle) {
+    public <T> List<AnnotatedEventView<T>> getEventsByEventHandle(String eventHandleType,
+                                                                  BigInteger cursor, Long limit,
+                                                                  Class<T> eventType) {
         List<Object> params = new ArrayList<>();
-        params.add(eventHandle);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
-                System.currentTimeMillis());
-        try {
-            JSONRPC2Response<List<MoveOSEvent>> jsonrpc2Response = jsonrpc2Session
-                    .sendAndGetListResult(jsonrpc2Request, MoveOSEvent.class);
-            assertSuccess(jsonrpc2Response);
-            return jsonrpc2Response.getResult();
-        } catch (JSONRPC2SessionException e) {
-            throw new RuntimeException(e);
+        params.add(eventHandleType);
+        if (cursor != null) {
+            params.add(cursor);
         }
-    }
-
-    public <T> List<MoveOSEvent<T>> getEventsByEventHandle(String eventHandle, Class<T> eventType) {
-        List<Object> params = new ArrayList<>();
-        params.add(eventHandle);
+        if (limit != null) {
+            params.add(limit);
+        }
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
                 System.currentTimeMillis());
         try {
-            JSONRPC2Response<List<MoveOSEvent<T>>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(jsonrpc2Request,
+            JSONRPC2Response<List<AnnotatedEventView<T>>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(jsonrpc2Request,
                     jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(
-                            MoveOSEvent.class, eventType
+                            AnnotatedEventView.class, eventType
                     )
             );
             assertSuccess(jsonrpc2Response);
