@@ -30,7 +30,7 @@ public class RoochJsonRpcClientTests {
     @Test
     void testGetAnnotatedStatesResponse_1() throws MalformedURLException, JsonProcessingException {
         String objectId = "0xad1122eb6c6cd05ce491ca3f27f7ca4e3574d607c88cfab593de0ac0ea35070e";
-        
+
         String rpcBaseUrl = "http://127.0.0.1:50051/";
         String path = "/object/" + objectId;
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
@@ -80,14 +80,32 @@ public class RoochJsonRpcClientTests {
         //Id: "0x53f32af12dc9236eb67f1c064cf55ee8891a90040f71ba17422cfdd91eb7358b";
         String eventHandleType = "0x565d5717526aecec1f9d464867f7d92d6eae2dc8ca73a0dc2613dd185d3d7bc7::something::SomethingCreated";
         RoochJsonRpcClient rpcClient = new RoochJsonRpcClient(rpcBaseUrl);
-        List<AnnotatedEventView<Object>> getEventsResponse1 = rpcClient.getEventsByEventHandle(eventHandleType, null, null, Object.class);
+        List<AnnotatedEventView<Object>> getEventsResponse1 = rpcClient.getEventsByEventHandle(eventHandleType,
+                null,
+                null,
+                Object.class);
         System.out.println(getEventsResponse1);
         System.out.println(getEventsResponse1.get(0).getParsedEventData().getValue().getClass());
 
+        System.out.println("------------------------");
+        BigInteger cursor = null;
+        Long limit = 1L;
+        System.out.println("cursor: " + cursor);
         List<AnnotatedEventView<TestSomethingCreated>> getEventsResponse2 = rpcClient.getEventsByEventHandle(eventHandleType,
-                null, null, TestSomethingCreated.class);
+                cursor, limit, TestSomethingCreated.class);
         System.out.println(getEventsResponse2);
         System.out.println(getEventsResponse2.get(0).getParsedEventData().getValue().i);
+
+        System.out.println("------------------------");
+        cursor = getEventsResponse2.get(0).getEvent().getEventId().getEventSeq();
+        cursor = cursor.add(BigInteger.ONE);
+        System.out.println("cursor: " + cursor);
+
+        getEventsResponse2 = rpcClient.getEventsByEventHandle(eventHandleType,
+                cursor, limit, TestSomethingCreated.class);
+        System.out.println(getEventsResponse2);
+        System.out.println(getEventsResponse2.get(0).getParsedEventData().getValue().i);
+        System.out.println("cursor: " + cursor);
     }
 
     @Test

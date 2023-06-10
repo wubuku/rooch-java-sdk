@@ -119,7 +119,7 @@ public class RoochJsonRpcClient {
                                                                   Class<T> eventType) {
         List<Object> params = new ArrayList<>();
         params.add(eventHandleType);
-        if (cursor != null) {
+        if (cursor != null || limit != null) {
             params.add(cursor);
         }
         if (limit != null) {
