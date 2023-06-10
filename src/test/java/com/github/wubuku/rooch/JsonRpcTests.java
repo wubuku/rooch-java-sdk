@@ -3,6 +3,7 @@ package com.github.wubuku.rooch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.wubuku.rooch.bean.AnnotatedMoveOptionView;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -89,7 +90,20 @@ public class JsonRpcTests {
 
     @Test
     void testJsonDeserialize_5() throws JsonProcessingException {
-
+        String jsonOpt = "{\n" +
+                "  \"abilities\": 7,\n" +
+                "  \"type\": \"0x1::option::Option<0x1::string::String>\",\n" +
+                "  \"value\": {\n" +
+                "    \"vec\": [\n" +
+                "      \"foo\"\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}";
+        AnnotatedMoveOptionView<String> s = objectMapper.readValue(jsonOpt,
+                new TypeReference<AnnotatedMoveOptionView<String>>() {
+                }
+        );
+        System.out.println(s);
     }
 
     @Test
