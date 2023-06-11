@@ -1,4 +1,4 @@
-package com.github.wubuku.rooch;
+package com.github.wubuku.rooch.tests;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -146,6 +146,7 @@ public class RoochJsonRpcClientTests {
         String objId = getEventsResponse1.get(0).getParsedEventData().getValue().obj_id;
         System.out.println("Created ObjectID: " + objId);
         System.out.println("-----------------");
+        System.out.println("Get state of created object:");
         String path = "/object/" + objId;
         List<GetAnnotatedStatesResponseMoveStructItem<TestSomethingObject>> response3 = rpcClient.getMoveStructAnnotatedStates(path,
                 TestSomethingObject.class

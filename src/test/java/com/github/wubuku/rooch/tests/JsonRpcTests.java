@@ -1,4 +1,4 @@
-package com.github.wubuku.rooch;
+package com.github.wubuku.rooch.tests;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

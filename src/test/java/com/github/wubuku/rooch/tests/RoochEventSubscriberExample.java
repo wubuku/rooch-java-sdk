@@ -1,4 +1,4 @@
-package com.github.wubuku.rooch;
+package com.github.wubuku.rooch.tests;
 
 import java.io.IOException;
 

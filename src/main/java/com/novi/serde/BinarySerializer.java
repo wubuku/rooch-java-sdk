@@ -4,6 +4,7 @@
 package com.novi.serde;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 public abstract class BinarySerializer implements Serializer {
     protected MyByteArrayOutputStream output;
@@ -26,7 +27,7 @@ public abstract class BinarySerializer implements Serializer {
     }
 
     public void serialize_str(String value) throws SerializationError {
-        serialize_bytes(new Bytes(value.getBytes()));
+        serialize_bytes(new Bytes(value.getBytes(StandardCharsets.UTF_8)));
     }
 
     public void serialize_bytes(Bytes value) throws SerializationError {
