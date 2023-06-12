@@ -1,6 +1,6 @@
 package com.github.wubuku.rooch.bcs;
 
-final class TraitHelpers {
+public final class TraitHelpers {
     private TraitHelpers() {
     }
 
@@ -173,6 +173,23 @@ final class TraitHelpers {
         java.util.List<@com.novi.serde.Unsigned Byte> obj = new java.util.ArrayList<@com.novi.serde.Unsigned Byte>((int) length);
         for (long i = 0; i < length; i++) {
             obj.add(deserializer.deserialize_u8());
+        }
+        return obj;
+    }
+
+
+    public static <T> void serializeVector(java.util.List<T> value, com.novi.serde.Serializer serializer, TypedSerializer<T> typedSerializer) throws com.novi.serde.SerializationError {
+        serializer.serialize_len(value.size());
+        for (T item : value) {
+            typedSerializer.serialize(serializer, item);
+        }
+    }
+
+    public static <T> java.util.List<T> deserializeVector(com.novi.serde.Deserializer deserializer, TypedDeserializer<T> typedDeserializer) throws com.novi.serde.DeserializationError {
+        long length = deserializer.deserialize_len();
+        java.util.List<T> obj = new java.util.ArrayList<>((int) length);
+        for (long i = 0; i < length; i++) {
+            obj.add(typedDeserializer.deserialize(deserializer));
         }
         return obj;
     }
