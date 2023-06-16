@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HexUtils {
+    public static String formatHex(String hex) {
+        return hex.length() / 2 == 0 ? hex
+                : hex.startsWith("0x") ? "0x0" + hex.substring(2)
+                : "0x0" + hex;
+    }
 
     public static byte[][] hexArrayToByteArrays(String[] hs) {
         List<byte[]> bytesList = new ArrayList<>(hs.length);
