@@ -80,7 +80,7 @@ public class BcsUtils {
         return s.get_bytes();
     }
 
-    public static byte[] serializeU16(Bytes v) {
+    public static byte[] serializeBytes(Bytes v) {
         BcsSerializer s = new BcsSerializer();
         try {
             s.serialize_bytes(v);
