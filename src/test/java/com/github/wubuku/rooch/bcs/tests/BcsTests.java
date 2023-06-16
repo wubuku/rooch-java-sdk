@@ -1,6 +1,7 @@
 package com.github.wubuku.rooch.bcs.tests;
 
 
+import com.github.wubuku.rooch.bcs.BcsUtils;
 import com.github.wubuku.rooch.bcs.MoveOSStdObject;
 import com.github.wubuku.rooch.utils.HexUtils;
 import com.novi.bcs.BcsSerializer;
@@ -18,6 +19,8 @@ public class BcsTests {
 
         serializer.serialize_u8((byte) 0);
         System.out.println(HexUtils.byteArrayToHex(serializer.get_bytes()));
+
+        System.out.println(HexUtils.byteArrayToHexWithPrefix(BcsUtils.serializeU16((short)0)));
     }
 
     @Test
