@@ -114,9 +114,9 @@ public class RoochJsonRpcClient {
         }
     }
 
-    public <T> List<AnnotatedEventView<T>> getEventsByEventHandle(String eventHandleType,
-                                                                  BigInteger cursor, Long limit,
-                                                                  Class<T> eventType) {
+    public <T> EventPageView<T> getEventsByEventHandle(String eventHandleType,
+                                                       BigInteger cursor, Long limit,
+                                                       Class<T> eventType) {
         List<Object> params = new ArrayList<>();
         params.add(eventHandleType);
         if (cursor != null || limit != null) {
@@ -128,9 +128,9 @@ public class RoochJsonRpcClient {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("rooch_getEventsByEventHandle", params,
                 System.currentTimeMillis());
         try {
-            JSONRPC2Response<List<AnnotatedEventView<T>>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(jsonrpc2Request,
+            JSONRPC2Response<EventPageView<T>> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     jsonrpc2Session.getObjectMapper().getTypeFactory().constructParametricType(
-                            AnnotatedEventView.class, eventType
+                            EventPageView.class, eventType
                     )
             );
             assertSuccess(jsonrpc2Response);
