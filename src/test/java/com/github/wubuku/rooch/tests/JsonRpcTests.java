@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.rooch.bean.AnnotatedMoveOptionView;
 import com.github.wubuku.rooch.bean.GetAnnotatedStatesResponse;
+import com.github.wubuku.rooch.utils.HexUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
@@ -163,4 +164,12 @@ public class JsonRpcTests {
 //        }
 //    }
 
+    @Test
+    void testHexUtils_1() {
+        String h = "0xd1e84ac071bea210a3b3644e4aaa4b04b385953b84293919993361210b8a5f7d";
+        System.out.println(h.length() % 2);
+        System.out.println(HexUtils.formatHex(h));
+        h = "0x1e84ac071bea210a3b3644e4aaa4b04b385953b84293919993361210b8a5f7d";
+        System.out.println(HexUtils.formatHex(h));
+    }
 }
