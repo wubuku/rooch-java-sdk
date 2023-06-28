@@ -21,6 +21,8 @@ public class BcsTests {
         System.out.println(HexUtils.byteArrayToHex(serializer.get_bytes()));
 
         System.out.println(HexUtils.byteArrayToHexWithPrefix(BcsUtils.serializeU16((short)0)));
+
+        System.out.println(HexUtils.byteArrayToHexWithPrefix(BcsUtils.serializeU64(1L)));
     }
 
     @Test
