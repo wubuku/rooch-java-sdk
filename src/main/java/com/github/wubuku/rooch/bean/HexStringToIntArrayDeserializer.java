@@ -26,18 +26,18 @@ public class HexStringToIntArrayDeserializer extends JsonDeserializer<Integer[]>
         } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
             return null;
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {
+            return jsonParser.readValueAs(Integer[].class);
+            /*
             List<Integer> list = new ArrayList<>();
             while (true) {
                 JsonToken n = jsonParser.nextToken();
-                if (!n.isNumeric()) {
-                    break;
-                }
+                if (!n.isNumeric()) break;
                 list.add(jsonParser.readValueAs(Integer.class));
             }
-            if (!JsonToken.END_ARRAY.equals(jsonParser.currentToken())) {
+            if (!JsonToken.END_ARRAY.equals(jsonParser.currentToken()))
                 throw new InvalidFormatException(jsonParser, "HexStringToIntArrayDeserializer.deserialize() error.", jsonParser.currentToken(), HexStringToIntArrayDeserializer.class);
-            }
             return list.toArray(new Integer[0]);
+             */
         }
         return null;
     }
