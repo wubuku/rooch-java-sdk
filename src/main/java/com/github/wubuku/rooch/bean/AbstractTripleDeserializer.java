@@ -12,7 +12,6 @@ public abstract class AbstractTripleDeserializer<T1, T2, T3> extends JsonDeseria
     @Override
     public Triple<T1, T2, T3> deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException {
         JsonToken currentToken = jsonParser.getCurrentToken();
-        ctx.getContextualType();
         if (JsonToken.VALUE_STRING.equals(currentToken)) {
             throw new InvalidFormatException(jsonParser, "AbstractTripleDeserializer.deserialize() error.", currentToken, AbstractTripleDeserializer.class);
         } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
