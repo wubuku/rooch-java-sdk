@@ -4,14 +4,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.github.wubuku.rooch.utils.HexUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class HexStringToIntArrayDeserializer extends JsonDeserializer<Integer[]> {
+public class HexToIntArrayDeserializer extends JsonDeserializer<Integer[]> {
     @Override
     public Integer[] deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException {
         JsonToken currentToken = jsonParser.getCurrentToken();

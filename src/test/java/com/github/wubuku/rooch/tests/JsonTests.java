@@ -2,7 +2,7 @@ package com.github.wubuku.rooch.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.github.wubuku.rooch.bean.HexStringToIntArrayDeserializer;
+import com.github.wubuku.rooch.bean.HexToIntArrayDeserializer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class JsonTests {
     }
 
     public static class Delivery {
-        @JsonDeserialize(using = HexStringToIntArrayDeserializer.class)
+        @JsonDeserialize(using = HexToIntArrayDeserializer.class)
         private Integer[] deliveryWeekdays;
 
         public Integer[] getDeliveryWeekdays() {
