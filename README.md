@@ -1,12 +1,14 @@
 # Rooch Java SDK
 
-This is a [Rooch]https://rooch.network) Java SDK. 
+This is a [Rooch](https://rooch.network) Java SDK. 
 
 ## How to use
 
 ### Maven
 
 Add the following dependency to the project's `pom.xml` file.
+
+Alternatively, you can import the dependency via https://jitpack.io (recommended).
 
 ```xml
 <dependencies>
